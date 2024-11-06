@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <title>Jamal | BarberShop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #1a202c;
+            overflow: hidden;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100vh;
+            background-color: rgb(29, 29, 29);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            width: 100vw;
+            max-width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        footer {
+            background: rgb(29, 29, 29);
+            color: white;
+            text-align: center;
+            padding: 1rem;
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+        }
+
+        .content {
+            padding: 20px;
+            max-width: 600px;
+            margin: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="#" id="close-sidebar" class="text-right px-4 py-2 text-white">✖</a>
+        <a href="./" class="text-white px-4 py-2"><em>Beranda</em></a>
+        <a href="./menu.html" class="text-white px-4 py-2"><em>Menu</em></a>
+        <a href="./peta.html" class="text-white px-4 py-2"><em>Peta</em></a>
+        <a href="./detail.html" class="text-white px-4 py-2"><em>Detail</em></a>
+        <a href="./layanan.html" class="mx-2 text-white hover:text-gray-800"><em>Layanan</em></a>
+        <br />
+        <br />
+        <br />
+
+        <div class="social-icons flex justify-center mt-4">
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-facebook fa-lg"></i>
+            </a>
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-instagram fa-lg"></i>
+            </a>
+        </div>
+
+        <div class="footer mt-auto">
+            <p class="mb-2 text-white text-center font-semibold">
+                <em>&copy;LuthfinaSari 2024 | Jamal Barber Shop</em>
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigasi -->
+    <nav style="background-color: rgb(29, 29, 29)" class="shadow mb-10 w-full justify-center fixed top-0 z-10">
+        <div class="w-full mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-semibold text-white"><em>Jamal BarberShop.</em></a>
+            <div class="hidden md:flex">
+                <a href="./" class="text-white hover:text-gray-800 mx-2"><em>Beranda</em></a>
+                <a href="./peta.html" class="mx-2 text-white hover:text-gray-800"><em>Peta</em></a>
+                <a href="./detail.html" class="mx-2 text-white hover:text-gray-800"><em>Detail</em></a>
+                <a href="./layanan.html" class="mx-2 text-white hover:text-gray-800"><em>Layanan</em></a>
+            </div>
+            <div class="md:hidden">
+                <button id="sidebar-toggle" class="text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Judul Halaman -->
+    <section class="pt-5 pb-10 text-center">
+
+
+        <!-- Daftar Layanan -->
+        <div class="container mx-auto px-6 py-12">
+            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+                <!-- Layanan Anak-anak -->
+                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Layanan Anak-anak</h2>
+                    <p class="text-gray-400 mb-4">Pangkas rambut yang cocok untuk anak-anak, dengan suasana nyaman dan
+                        aman.
+                    </p>
+                    <p class="text-xl font-bold text-yellow-500">Rp 25,000</p>
+                </div>
+
+                <!-- Layanan Dewasa -->
+                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Layanan Dewasa</h2>
+                    <p class="text-gray-400 mb-4">Pangkas rambut untuk pria dewasa dengan berbagai pilihan gaya modern.
+                    </p>
+                    <p class="text-xl font-bold text-yellow-500">Rp 50,000</p>
+                </div>
+
+                <!-- Layanan Cukur Jenggot -->
+                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Cukur Jenggot</h2>
+                    <p class="text-gray-400 mb-4">Perawatan dan cukur jenggot untuk penampilan rapi dan stylish.</p>
+                    <p class="text-xl font-bold text-yellow-500">Rp 30,000</p>
+                </div>
+
+                <!-- Layanan Cuci Rambut -->
+                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Cuci Rambut</h2>
+                    <p class="text-gray-400 mb-4">Layanan cuci rambut menggunakan produk berkualitas.</p>
+                    <p class="text-xl font-bold text-yellow-500">Rp 15,000</p>
+                </div>
+
+                <!-- Paket Lengkap -->
+                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-2xl font-semibold mb-4">Paket Lengkap</h2>
+                    <p class="text-gray-400 mb-4">Paket lengkap termasuk potong rambut, cuci rambut, dan cukur jenggot.
+                    </p>
+                    <p class="text-xl font-bold text-yellow-500">Rp 80,000</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <footer style="background: rgb(29, 29, 29)" class="text-white w-full py-2 mt-8 fixed bottom-0 h-30 bg-opacity-50">
+        <div class="container mx-auto text-center w-full">
+            <div class="social-icons flex justify-center mt-4">
+                <a href="#" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-github fa-lg"></i>
+                </a>
+                <a href="#" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-facebook fa-lg"></i>
+                </a>
+                <a href="#" target="_blank" class="text-white mx-2">
+                    <i class="fab fa-instagram fa-lg"></i>
+                </a>
+            </div>
+            <p class="mb-2 font-semibold">
+                <em>&copy;LuthfinaSari 2024 | Jamal Barber Shop</em>
+            </p>
+        </div>
+    </footer>
+    <script>
+        const sidebar = document.getElementById("sidebar");
+        const sidebarToggle = document.getElementById("sidebar-toggle");
+        const closeSidebar = document.getElementById("close-sidebar");
+
+        sidebarToggle.addEventListener("click", function () {
+            sidebar.style.left = "0";
+        });
+
+        closeSidebar.addEventListener("click", function () {
+            sidebar.style.left = "-250px";
+        });
+    </script>
+</body>
+
+</html>

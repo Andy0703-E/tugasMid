@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Jamal | BarberShop</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            /* Mengatur tinggi body untuk mengisi viewport */
+            overflow: hidden;
+            /* Menghilangkan scrolling */
+            background-color: #1a202c;
+            /* Warna latar belakang gelap */
+        }
+
+        .content {
+            text-align: center;
+            color: white;
+            max-width: 600px;
+            /* Mengatur lebar maksimum konten */
+            padding: 20px;
+            /* Memberikan sedikit padding */
+        }
+
+        .popup-container {
+            text-align: left;
+            font-family: Roboto, sans-serif;
+            width: 50vw;
+            max-width: 100%;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        .popup-header {
+            font-weight: bold;
+            font-size: 1.5em;
+            margin-bottom: 0.5em;
+        }
+
+        .popup-rating {
+            color: #f39c12;
+            font-size: 1em;
+        }
+
+        .popup-address,
+        .popup-contact {
+            margin-top: 5px;
+            font-size: 1em;
+            color: #555;
+        }
+
+        .popup-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+
+        .dropdown-content {
+            display: none;
+            background-color: #f9f9f9;
+            padding: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+            border-radius: 8px;
+            margin-top: 5px;
+            max-width: 100%;
+        }
+
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        .sidebar {
+            width: 250px;
+            position: fixed;
+            top: 0;
+            left: -250px;
+            height: 100%;
+            background-color: rgb(29, 29, 29);
+            transition: left 0.3s ease;
+            z-index: 1000;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            padding: 15px;
+            text-decoration: none;
+            transition: background 0.3s;
+        }
+
+        .sidebar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .sidebar-toggle {
+            cursor: pointer;
+        }
+
+        .menu-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .fullscreen {
+            height: 100vh;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-gray-100">
+    <!-- Sidebar -->
+    <div id="sidebar" class="sidebar">
+        <a href="#" id="close-sidebar" class="text-right px-4 py-2 text-white">✖</a>
+        <a href="./" class="text-white px-4 py-2"><em>Beranda</em></a>
+        <a href="./menu.html" class="text-white px-4 py-2"><em>Menu</em></a>
+        <a href="./peta.html" class="text-white px-4 py-2"><em>Peta</em></a>
+        <a href="./saran.html" class="text-white px-4 py-2"><em>Saran</em></a>
+        <a href="./detail.html" class="text-white px-4 py-2"><em>Detail</em></a>
+        <a href="./layanan.html" class="mx-2 text-white hover:text-gray-800"><em>Layanan</em></a>
+        <br />
+        <br />
+        <br />
+
+        <div class="social-icons flex justify-center mt-4">
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-github fa-lg"></i>
+            </a>
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-facebook fa-lg"></i>
+            </a>
+            <a href="#" target="_blank" class="text-white mx-2">
+                <i class="fab fa-instagram fa-lg"></i>
+            </a>
+        </div>
+
+        <div class="footer mt-auto">
+            <p class="mb-2 text-white text-center font-semibold">
+                <em>&copy;LuthfinaSari 2024 | Jamal Barber Shop</em>
+            </p>
+        </div>
+    </div>
+
+    <!-- Navigasi -->
+    <nav style="background-color: rgb(29, 29, 29)" class="shadow mb-10 w-full justify-center fixed top-0 z-10">
+        <div class="w-full mx-auto px-4 py-3 flex justify-between items-center">
+            <a href="#" class="text-2xl font-semibold text-white"><em>Jamal BarberShop.</em></a>
+            <div class="hidden md:flex">
+                <a href="./" class="text-white hover:text-gray-800 mx-2"><em>Beranda</em></a>
+                <a href="./peta.html" class="mx-2 text-white hover:text-gray-800"><em>Peta</em></a>
+                <a href="./detail.html" class="mx-2 text-white hover:text-gray-800"><em>Detail</em></a>
+                <a href="./layanan.html" class="mx-2 text-white hover:text-gray-800"><em>Layanan</em></a>
+            </div>
+            <div class="md:hidden">
+                <button id="sidebar-toggle" class="text-white focus:outline-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M4 6h16M4 12h16m-7 6h7" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <div class="w-full mx-auto flex-1 mt-16">
+        <!-- Bagian Peta -->
+        <div class="container mx-auto py-6">
+            <div id="peta" class="mb-6">
+                <div style="background: #ffffff ;" class=" w-full rounded-lg shadow-lg overflow-hidden">
+                    <div class="bg-gray-100 p-4" data-aos="fade-up" data-aos-duration="1000" data-aos-delay="200">
+                        <div id="map" class="w-full h-80 rounded-lg"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer style="background: rgb(29, 29, 29)"
+            class="text-white w-full py-2 mt-8 fixed bottom-0 h-30 bg-opacity-50">
+            <div class="container mx-auto text-center w-full">
+                <div class="social-icons flex justify-center mt-4">
+                    <a href="#" target="_blank" class="text-white mx-2">
+                        <i class="fab fa-github fa-lg"></i>
+                    </a>
+                    <a href="#" target="_blank" class="text-white mx-2">
+                        <i class="fab fa-facebook fa-lg"></i>
+                    </a>
+                    <a href="#" target="_blank" class="text-white mx-2">
+                        <i class="fab fa-instagram fa-lg"></i>
+                    </a>
+                </div>
+                <p class="mb-2 font-semibold">
+                    <em>&copy;LuthfinaSari 2024 | Jamal Barber Shop</em>
+                </p>
+            </div>
+        </footer>
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            // Ambil elemen sidebar dan tombol
+            const sidebar = document.getElementById("sidebar");
+            const sidebarToggle = document.getElementById("sidebar-toggle");
+            const closeSidebar = document.getElementById("close-sidebar");
+
+            // Fungsi untuk membuka sidebar
+            sidebarToggle.addEventListener("click", function () {
+                sidebar.style.left = "0px";
+            });
+
+            // Fungsi untuk menutup sidebar
+            closeSidebar.addEventListener("click", function () {
+                sidebar.style.left = "-250px";
+            });
+
+            // Ambil semua tautan di sidebar
+            const sidebarLinks = document.querySelectorAll(".sidebar");
+
+            // Tambahkan event listener untuk setiap tautan
+            sidebarLinks.forEach((link) => {
+                link.addEventListener("click", function () {
+                    sidebar.style.left = "-250px";
+                });
+            });
+
+            document.addEventListener("DOMContentLoaded", function () {
+                const map = L.map("map").setView([-6.114831, 120.458773], 18);
+
+                const umkmData = {
+                    name: "Jamal BarberShop",
+                    rating: "5.0",
+                    reviews: 1,
+                    category: "Tempat Cukur Rambut",
+                    buka: "Buka · Tutup pukul 22.04 🔻",
+                    alamat: "Jl. Kemakmuran No.32, Benteng, Kec. Benteng, Kab. Kepulauan Selayar, Sulawesi Selatan 92812",
+                    phone: "082343432678",
+                    coords: [-6.114831, 120.458773],
+                    hours: {
+                        Senin: "07.00–22.04",
+                        Selasa: "07.00–22.04",
+                        Rabu: "07.00–22.04",
+                        Kamis: "07.00–22.04",
+                        Jumat: "07.00–22.04",
+                        Sabtu: "07.00–22. 04",
+                        Minggu: "07.00–22.04",
+                    },
+                };
+
+                const marker = L.marker(umkmData.coords).addTo(map);
+
+                // Menambahkan tooltip permanen pada marker
+                marker.bindTooltip(umkmData.name, {
+                    permanent: true,
+                    direction: "top",
+                    className: "marker-tooltip",
+                });
+
+                marker.bindPopup(`
+                <div class="popup-container">
+                    <div class="popup-header">${umkmData.name}</div>
+                    <div class="popup-rating">⭐ ${umkmData.rating} <span>(${umkmData.reviews})</span></div>
+                    <div class="popup-category">${umkmData.category}</div>
+                    <div class="popup-address"><i class="fas fa-map-marker-alt"></i> ${umkmData.alamat}</div>
+                    <div class="popup-hours"><i class="fas fa-clock"></i> <span>${umkmData.buka}</span></div>
+                    <div class="popup-contact"><i class="fas fa-phone-alt"></i> ${umkmData.phone}</div>
+                </div>
+            `);
+
+                fetch("./jalanBentengAnjay.geojson")
+                    .then((response) => response.json())
+                    .then((geojsonData) => {
+                        L.geoJSON(geojsonData, {
+                            style: {
+                                color: "#f0f0f0",
+                                weight: 3,
+                                opacity: 1,
+                            },
+                        }).addTo(map);
+                    })
+                    .catch((error) =>
+                        console.error("Error loading jalan GeoJSON:", error)
+                    );
+
+                fetch("./kecamatanBenteng.geojson")
+                    .then((response) => response.json())
+                    .then((geojsonData) => {
+                        L.geoJSON(geojsonData, {
+                            style: {
+                                color: "#333",
+                                weight: 1.5,
+                                opacity: 0.8,
+                                fillColor: "#333",
+                                fillOpacity: 0.1,
+                            },
+                        }).addTo(map);
+                    })
+                    .catch((error) =>
+                        console.error("Error loading kecamatanBenteng GeoJSON:", error)
+                    );
+            });
+        </script>
+</body>
+
+</html>
