@@ -25,12 +25,6 @@
             overflow: hidden;
         }
 
-        @media (max-width:676px) {
-            body {
-                overflow: auto;
-            }
-        }
-
         .sidebar {
             width: 250px;
             position: fixed;
@@ -78,6 +72,14 @@
             max-width: 600px;
             margin: auto;
         }
+
+        @media (max-width:676px) {
+            body {
+                overflow: auto;
+                height: 100vh;
+                top: 50px;
+            }
+        }
     </style>
 </head>
 
@@ -86,6 +88,7 @@
     <div id="sidebar" class="sidebar">
         <a href="#" id="close-sidebar" class="text-right px-4 py-2 text-white">✖</a>
         <a href="./" class="text-white px-4 py-2"><em>Beranda</em></a>
+        <a href="./menu.html" class="text-white px-4 py-2"><em>Menu</em></a>
         <a href="./peta.html" class="text-white px-4 py-2"><em>Peta</em></a>
         <a href="./detail.html" class="text-white px-4 py-2"><em>Detail</em></a>
         <a href="./layanan.html" class="mx-2 text-white hover:text-gray-800"><em>Layanan</em></a>
@@ -136,52 +139,30 @@
 
     <!-- Judul Halaman -->
     <section class="pt-5 pb-10 text-center">
-
-
         <!-- Daftar Layanan -->
-        <div class="container mx-auto px-6 py-12">
-            <div class="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+        <div class="container mx-auto px-4 py-8 max-w-5xl"> <!-- Tambahkan max-w-5xl dan mx-auto -->
+            <div class="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-2">
                 <!-- Layanan Anak-anak -->
-                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Layanan Anak-anak</h2>
-                    <p class="text-gray-400 mb-4">Pangkas rambut yang cocok untuk anak-anak, dengan suasana nyaman dan
-                        aman.
-                    </p>
-                    <p class="text-xl font-bold text-yellow-500">Rp 25,000</p>
+                <div class="service-card p-4 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-xl font-semibold mb-2">Layanan Anak-anak</h2>
+                    <p class="text-gray-400 mb-3 text-sm">Pangkas rambut yang cocok untuk anak-anak, dengan suasana
+                        nyaman
+                        dan aman.</p>
+                    <p class="text-lg font-bold text-yellow-500">Rp 15,000</p>
                 </div>
 
                 <!-- Layanan Dewasa -->
-                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Layanan Dewasa</h2>
-                    <p class="text-gray-400 mb-4">Pangkas rambut untuk pria dewasa dengan berbagai pilihan gaya modern.
-                    </p>
-                    <p class="text-xl font-bold text-yellow-500">Rp 50,000</p>
-                </div>
-
-                <!-- Layanan Cukur Jenggot -->
-                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Cukur Jenggot</h2>
-                    <p class="text-gray-400 mb-4">Perawatan dan cukur jenggot untuk penampilan rapi dan stylish.</p>
-                    <p class="text-xl font-bold text-yellow-500">Rp 30,000</p>
-                </div>
-
-                <!-- Layanan Cuci Rambut -->
-                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Cuci Rambut</h2>
-                    <p class="text-gray-400 mb-4">Layanan cuci rambut menggunakan produk berkualitas.</p>
-                    <p class="text-xl font-bold text-yellow-500">Rp 15,000</p>
-                </div>
-
-                <!-- Paket Lengkap -->
-                <div class="service-card p-6 bg-gray-800 rounded-lg shadow-lg text-center">
-                    <h2 class="text-2xl font-semibold mb-4">Paket Lengkap</h2>
-                    <p class="text-gray-400 mb-4">Paket lengkap termasuk potong rambut, cuci rambut, dan cukur jenggot.
-                    </p>
-                    <p class="text-xl font-bold text-yellow-500">Rp 80,000</p>
+                <div class="service-card p-4 bg-gray-800 rounded-lg shadow-lg text-center">
+                    <h2 class="text-xl font-semibold mb-2">Layanan Dewasa</h2>
+                    <p class="text-gray-400 mb-3 text-sm">Pangkas rambut untuk pria dewasa dengan berbagai pilihan gaya
+                        modern.</p>
+                    <p class="text-lg font-bold text-yellow-500">Rp 20,000</p>
                 </div>
             </div>
         </div>
     </section>
+
+
     <footer style="background: rgb(29, 29, 29)" class="text-white w-full py-2 mt-8 fixed bottom-0 h-30 bg-opacity-50">
         <div class="container mx-auto text-center w-full">
             <div class="social-icons flex justify-center mt-4">
